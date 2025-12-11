@@ -12,10 +12,7 @@ Smart RAG Assistant is a local-first, free-stack Retrieval-Augmented Generation 
 
 ## Project structure
 
-- `app/` – FastAPI app, RAG logic, configuration
-- `data/` – local documents (raw and processed, **not committed to Git**)
-- `storage/chroma/` – ChromaDB persistence (**not committed to Git**)
-- `tests/` – unit and integration tests (to be added)
+
 
 ## Setup
 
