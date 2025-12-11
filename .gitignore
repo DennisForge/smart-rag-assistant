@@ -25,3 +25,6 @@ storage/chroma/
 # Env files
 .env
 *.env
+
+# Local notes and command references
+COMMANDS.md
