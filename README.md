@@ -42,11 +42,32 @@ smart-rag-assistant/
 │   │   └── config.py         # Application configuration and settings
 │   ├── models/               # Data models (Pydantic schemas)
 │   │   └── __init__.py
-│   └── services/             # Business logic and services
-│       └── __init__.py
+│   ├── services/             # Business logic and services
+│   │   └── __init__.py
+│   └── rag/                  # RAG (Retrieval-Augmented Generation) module
+│       ├── __init__.py
+│       ├── models/           # RAG data models
+│       │   ├── __init__.py
+│       │   ├── documents.py  # Document, chunk, and storage models
+│       │   └── embeddings.py # Embedding vector and metadata models
+│       ├── interfaces/       # Abstract base classes
+│       │   ├── __init__.py
+│       │   ├── embeddings.py # Embedding interface contract
+│       │   └── vector_store.py # Vector store interface contract
+│       ├── services/         # RAG orchestration services
+│       │   ├── __init__.py
+│       │   └── indexing.py   # Document indexing and retrieval service
+│       └── vectorstores/     # Vector database implementations
+│           ├── __init__.py
+│           └── chroma.py     # ChromaDB implementation
 ├── tests/                     # Test suite
 │   ├── __init__.py
-│   └── test_health.py        # Health endpoint tests
+│   ├── test_health.py        # Health endpoint tests
+│   └── rag/                  # RAG module tests
+│       ├── __init__.py
+│       ├── test_embeddings_interface.py
+│       ├── test_vector_store_interface.py
+│       └── test_indexing_service.py
 ├── requirements.txt           # Python dependencies
 └── README.md                 # Project documentation
 ```
@@ -153,3 +174,65 @@ pytest -v
 **F1 Phase Complete** ✅ 
 
 The backend skeleton is ready for the next phase: RAG integration with ChromaDB and embedding models
+
+---
+
+## Phase F2 – RAG Architecture Skeleton
+
+This phase establishes the RAG module architecture with interfaces, models, and service structure. No real implementation yet - just contracts and skeletons.
+
+### What's Included in F2
+
+**Data Models** (`app/rag/models/`)
+- `documents.py` - Document input/output schemas, chunks, storage models
+- `embeddings.py` - Embedding vectors, metadata, similarity results
+
+**Interfaces** (`app/rag/interfaces/`)
+- `embeddings.py` - Abstract contract for embedding models (embed_text, embed_documents)
+- `vector_store.py` - Abstract contract for vector databases (add, query, delete)
+
+**Services** (`app/rag/services/`)
+- `indexing.py` - Orchestration service skeleton (index_document, search, delete)
+
+**Vector Stores** (`app/rag/vectorstores/`)
+- `chroma.py` - ChromaDB implementation skeleton
+
+**Tests** (`tests/rag/`)
+- Interface validation tests
+- Service structure tests
+- No real integration tests yet (coming in F3)
+
+### Architecture Principles
+
+1. **Interface-Driven Design** - All implementations depend on abstract interfaces
+2. **Dependency Injection** - Services receive their dependencies via constructor
+3. **Type Safety** - Full Pydantic validation for all data structures
+4. **Testability** - Interfaces can be easily mocked for unit testing
+
+### Running Tests
+
+```bash
+# Run all tests including RAG skeleton tests
+pytest
+
+# Run only RAG tests
+pytest tests/rag/
+
+# Run with verbose output
+pytest tests/rag/ -v
+```
+
+**Expected output:** All interface and structure tests should pass.
+
+### Next Steps (F3)
+
+- Implement real embedding generation using sentence-transformers
+- Connect ChromaDB vector store
+- Implement document chunking logic
+- Add API endpoints for document indexing and search
+
+---
+
+**F2 Phase Complete** ✅ 
+
+RAG architecture skeleton is in place. Ready for F3: Real implementations and integrations.
