@@ -28,3 +28,6 @@ storage/chroma/
 
 # Local notes and command references
 COMMANDS.md
+
+# Local AI agent instructions
+.github/copilot-instructions.md

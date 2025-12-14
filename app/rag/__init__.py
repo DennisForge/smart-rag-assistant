@@ -7,3 +7,6 @@ This module contains all RAG-related components:
 - services: Business logic for indexing and retrieval
 - vectorstores: Vector database implementations (ChromaDB)
 """
+from app.rag.models.settings import RAGSettings
+
+__all__ = ["RAGSettings"]
