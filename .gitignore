@@ -4,9 +4,28 @@ __pycache__/
 *.pyo
 *.pyd
 *.sqlite3
+*.egg-info/
+build/
+dist/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Logs
+*.log
+*.swp
+*.swo
+*~
 
 # Virtual env
 .venv/
+
+# Model cache (sentence-transformers, etc.)
+models/
+.cache/
 venv/
 env/
 
@@ -21,6 +40,7 @@ env/
 data/raw/
 data/processed/
 storage/chroma/
+chroma_data/
 
 # Env files
 .env

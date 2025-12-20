@@ -12,3 +12,6 @@ class RAGSettings(BaseModel):
 
     collection_name: str = "default"
     default_top_k: int = 5
+    embedding_model_name: str = "sentence-transformers/all-MiniLM-L6-v2"
+    chroma_persist_dir: str | None = "chroma_data"
+    chroma_collection_name: str = "documents"
