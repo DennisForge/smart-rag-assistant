@@ -10,10 +10,8 @@ class EmbeddingInterface(ABC):
 
     @abstractmethod
     def embed_text(self, text: str) -> EmbeddingVector:
-        
         raise NotImplementedError
 
     @abstractmethod
     def embed_texts(self, texts: List[str]) -> List[EmbeddingVector]:
-        
         raise NotImplementedError

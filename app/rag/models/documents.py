@@ -23,7 +23,7 @@ class DocumentChunk(BaseModel):
 
 
 class ScoredDocumentChunk(BaseModel):
-    """Chunk with similarity score from vector search."""
+    """Chunk with score from vector search (lower is better for distance metrics)."""
 
     chunk: DocumentChunk
     score: float

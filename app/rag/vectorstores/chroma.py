@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from app.rag.interfaces.vector_store import VectorStoreInterface
 from app.rag.models.documents import DocumentChunk, ScoredDocumentChunk
@@ -49,8 +49,8 @@ class ChromaVectorStore(VectorStoreInterface):
 
     def add_chunks(
         self,
-        chunks: List[DocumentChunk],
-        embeddings: List[EmbeddingVector],
+        chunks: list[DocumentChunk],
+        embeddings: list[EmbeddingVector],
     ) -> None:
         """Add document chunks with embeddings to vector store."""
         if not chunks:
@@ -92,12 +92,69 @@ class ChromaVectorStore(VectorStoreInterface):
         self,
         embedding: EmbeddingVector,
         top_k: int = 5,
-    ) -> List[ScoredDocumentChunk]:
+    ) -> list[ScoredDocumentChunk]:
         """Query vector store for similar chunks."""
-        # TODO (F3): Implement query retrieval
-        raise NotImplementedError
+        # Guard: fail-fast if collection not initialized
+        if self._collection is None:
+            raise RuntimeError(
+                "ChromaDB collection not initialized. Call _initialize_client() first."
+            )
 
-    def delete_by_document_ids(self, document_ids: List[str]) -> None:
+        # Query ChromaDB
+        results = self._collection.query(
+            query_embeddings=[embedding.vector],
+            n_results=top_k,
+        )
+
+        # Guard: ensure expected fields are present
+        required_fields = ["ids", "distances", "documents", "metadatas"]
+        for field in required_fields:
+            if field not in results:
+                raise RuntimeError(
+                    f"Chroma query did not return expected fields. Missing: {field}"
+                )
+
+        # Convert ChromaDB results to ScoredDocumentChunk
+        scored_chunks = []
+
+        # ChromaDB returns results in this structure:
+        # results = {
+        #     'ids': [['id1', 'id2', ...]],
+        #     'distances': [[0.1, 0.2, ...]],
+        #     'documents': [['doc1', 'doc2', ...]],
+        #     'metadatas': [[{...}, {...}, ...]],
+        # }
+
+        if not results["ids"] or not results["ids"][0]:
+            return []
+
+        ids = results["ids"][0]
+        distances = results["distances"][0]
+        documents = results["documents"][0]
+        metadatas = results["metadatas"][0]
+
+        for i in range(len(ids)):
+            # Extract metadata and pop reserved keys
+            meta = dict(metadatas[i])
+            document_id = meta.pop("document_id", "")
+            index = meta.pop("index", 0)
+
+            chunk = DocumentChunk(
+                id=ids[i],
+                document_id=document_id,
+                content=documents[i],
+                index=index,
+                metadata=meta,  # Only extra metadata
+            )
+            scored_chunk = ScoredDocumentChunk(
+                chunk=chunk,
+                score=distances[i],  # Distance metric: lower is better
+            )
+            scored_chunks.append(scored_chunk)
+
+        return scored_chunks
+
+    def delete_by_document_ids(self, document_ids: list[str]) -> None:
         """Delete all chunks belonging to specified documents."""
         # TODO (F3): Implement deletion (optional for initial F3)
         raise NotImplementedError
