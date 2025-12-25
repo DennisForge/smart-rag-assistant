@@ -105,6 +105,6 @@ pytest tests/rag/ -v
 - ✅ **F2**: RAG architecture (interfaces, models)
 - ✅ **F3**: Embeddings + ChromaDB indexing
 - ✅ **F4**: Retrieval + context building
-- ⏳ **F5**: Local LLM integration
+- ✅ **F5**: Local LLM integration (Ollama)
 
-Current status: **21 tests passing**, ready for LLM integration.
+Current status: **22 tests passing**, full RAG pipeline operational.

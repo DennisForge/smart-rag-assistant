@@ -1,0 +1,2 @@
+"""Prompt management module."""
+pass
